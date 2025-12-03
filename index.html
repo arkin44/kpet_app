@@ -1,27 +1,454 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<title>K-PET İletişim Platformu</title>
-<style>
-body { font-family:sans-serif; margin:0; padding:0; display:flex; height:100vh; }
-.sidebar { width:250px; background:#f2f2f2; padding:20px; box-sizing:border-box; }
-.main { flex:1; padding:20px; }
-button { padding:8px 12px; margin:5px 0; width:100%; }
-</style>
+  <meta charset="UTF-8" />
+  <title>K-PET İletişim Platformu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google Font (isteğe bağlı, internet yoksa sistem fontuna düşer) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --kpet-red: #b30000;
+      --kpet-red-dark: #8a0000;
+      --kpet-bg: #f3f3f3;
+      --card-bg: #ffffff;
+      --text-main: #222222;
+      --text-muted: #777777;
+      --border-soft: #e3e3e3;
+      --radius-lg: 18px;
+      --radius-xl: 26px;
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--kpet-bg);
+      color: var(--text-main);
+    }
+
+    /* ÜST BANT */
+
+    .header {
+      background: linear-gradient(135deg, var(--kpet-red), var(--kpet-red-dark));
+      color: #ffffff;
+      padding: 24px 6vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .header-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 32px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .header-logo-inner {
+      text-align: center;
+      font-weight: 700;
+      color: var(--kpet-red);
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .header-logo-inner span {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      margin-top: 4px;
+    }
+
+    /* ANA İÇERİK */
+
+    .page {
+      padding: 28px 6vw 60px;
+    }
+
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 16px;
+    }
+
+    .filters-row label {
+      font-size: 14px;
+      font-weight: 500;
+      margin-right: 2px;
+    }
+
+    .select,
+    .search-input {
+      border-radius: 999px;
+      border: 1px solid #d7d7d7;
+      padding: 10px 16px;
+      font-size: 14px;
+      background: #ffffff;
+      min-width: 150px;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    .select {
+      padding-right: 36px;
+      background-image: linear-gradient(45deg, transparent 50%, #999 50%),
+        linear-gradient(135deg, #999 50%, transparent 50%);
+      background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .actions-row {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 0;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.06s ease, box-shadow 0.06s ease, background 0.12s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--kpet-red);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(179, 0, 0, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: var(--kpet-red-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(179, 0, 0, 0.4);
+    }
+
+    .btn-ghost {
+      background: #ffffff;
+      color: var(--kpet-red);
+      border: 1px solid rgba(179, 0, 0, 0.25);
+    }
+
+    .btn-ghost:hover {
+      background: #fff5f5;
+      transform: translateY(-1px);
+    }
+
+    /* KARARLAR KARTI */
+
+    .content-wrapper {
+      margin-top: 28px;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .card-wrapper {
+      max-width: 620px;
+      width: 100%;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .decision-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .decision-inner {
+      display: flex;
+    }
+
+    .decision-bar {
+      width: 6px;
+      background: var(--kpet-red);
+      border-radius: 0 18px 18px 0;
+    }
+
+    .decision-body {
+      padding: 20px 22px 18px;
+      flex: 1;
+    }
+
+    .decision-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .decision-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .status-pill {
+      padding: 4px 14px;
+      border-radius: 999px;
+      border: 1.5px solid var(--kpet-red);
+      color: var(--kpet-red);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: #fff7f7;
+      white-space: nowrap;
+    }
+
+    .decision-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px solid var(--border-soft);
+      margin: 8px 0 12px;
+    }
+
+    .sub-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .no-opinion {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .textarea::placeholder {
+      color: #b0b0b0;
+    }
+
+    .textarea:focus {
+      border-color: var(--kpet-red);
+      box-shadow: 0 0 0 1px rgba(179, 0, 0, 0.25);
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 22px 18px;
+    }
+
+    .btn-save {
+      padding-inline: 26px;
+      font-size: 14px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 900px) {
+      .header {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      .header-title {
+        font-size: 24px;
+      }
+
+      .header-logo {
+        width: 90px;
+        height: 90px;
+        border-radius: 24px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .page {
+        padding-inline: 16px;
+      }
+
+      .content-wrapper {
+        justify-content: stretch;
+      }
+
+      .card-wrapper {
+        max-width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="sidebar">
-<h3>Filtreler</h3>
-<button onclick="showMsg('GM mesajları')">GM</button>
-<button onclick="showMsg('Tüm mesajlar')">Tümü</button>
-</div>
-<div class="main">
-<h1>K-PET İletişim Platformu</h1>
-<div id="msg">Mesaj seçiniz.</div>
-</div>
-<script>
-function showMsg(t){ document.getElementById('msg').innerText = t; }
-</script>
+
+  <!-- ÜST BANT -->
+  <header class="header">
+    <div class="header-left">
+      <div class="header-title">K-PET İletişim Platformu</div>
+    </div>
+    <div class="header-logo">
+      <div class="header-logo-inner">
+        K-Pet
+        <span>BOARD</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SAYFA İÇERİĞİ -->
+  <main class="page">
+    <!-- Filtreler satırı -->
+    <div class="filters-row">
+      <div class="filter-group">
+        <label for="role-select">Rol:</label>
+        <select id="role-select" class="select">
+          <option>Mete Boyacı</option>
+          <option>Okan</option>
+          <option>GM</option>
+          <option>Board</option>
+        </select>
+      </div>
+
+      <select class="select">
+        <option>Mete Boyacı</option>
+        <option>Diğer Kullanıcı</option>
+      </select>
+
+      <select class="select">
+        <option>Tümü</option>
+        <option>Pending</option>
+        <option>Onaylandı</option>
+        <option>Reddedildi</option>
+      </select>
+
+      <input class="search-input" type="text" placeholder="Ara (başlık / detay)" />
+    </div>
+
+    <!-- Üst butonlar -->
+    <div class="actions-row">
+      <button class="btn btn-ghost" type="button" onclick="handleBackup()">Yedek Al</button>
+      <button class="btn btn-ghost" type="button" onclick="handleCleanup()">Depoyu Temizle</button>
+    </div>
+
+    <!-- Kararlar kartı -->
+    <div class="content-wrapper">
+      <div class="card-wrapper">
+        <div class="section-title">Kararlar</div>
+
+        <article class="decision-card">
+          <div class="decision-inner">
+            <div class="decision-bar"></div>
+            <div class="decision-body">
+              <div class="decision-header">
+                <div class="decision-title">Örnek: Terminal Bakım</div>
+                <div class="status-pill">PENDING</div>
+              </div>
+              <div class="decision-desc">
+                Kamera sistemi kritik güncelleme.
+              </div>
+
+              <hr class="divider" />
+
+              <div class="sub-title">Board Görüşleri</div>
+              <div class="no-opinion">Henüz görüş yok</div>
+
+              <textarea
+                class="textarea"
+                id="opinion"
+                placeholder="Görüş / gerekçe (Mete/Okan)"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <button class="btn btn-primary btn-save" type="button" onclick="handleSave()">Kaydet</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function handleBackup() {
+      alert("Bu demo sürüm. Gerçek sistemde burada board kararları dışa aktarılır / yedek alınır.");
+    }
+
+    function handleCleanup() {
+      const ok = confirm("Depoyu temizlemek istediğinize emin misiniz? (DEMO)");
+      if (ok) {
+        alert("Demo: Geçici kayıtlar temizlendi varsayılıyor.");
+      }
+    }
+
+    function handleSave() {
+      const textarea = document.getElementById("opinion");
+      const value = textarea.value.trim();
+
+      if (!value) {
+        alert("Lütfen bir görüş / gerekçe yazın.");
+        textarea.focus();
+        return;
+      }
+
+      alert("Demo: Görüş kaydedildi gibi davranıyoruz.\n\nMetin:\n" + value);
+      textarea.value = "";
+    }
+  </script>
 </body>
 </html>

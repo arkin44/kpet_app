@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>K-PET İletişim Platformu</title>
+<style>
+body { font-family:sans-serif; margin:0; padding:0; display:flex; height:100vh; }
+.sidebar { width:250px; background:#f2f2f2; padding:20px; box-sizing:border-box; }
+.main { flex:1; padding:20px; }
+button { padding:8px 12px; margin:5px 0; width:100%; }
+</style>
+</head>
+<body>
+<div class="sidebar">
+<h3>Filtreler</h3>
+<button onclick="showMsg('GM mesajları')">GM</button>
+<button onclick="showMsg('Tüm mesajlar')">Tümü</button>
+</div>
+<div class="main">
+<h1>K-PET İletişim Platformu</h1>
+<div id="msg">Mesaj seçiniz.</div>
+</div>
+<script>
+function showMsg(t){ document.getElementById('msg').innerText = t; }
+</script>
+</body>
+</html>
